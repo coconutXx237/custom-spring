@@ -4,10 +4,10 @@ import ru.study.model.Person;
 import ru.study.model.User;
 import ru.study.util.ObjectFactory;
 
-
 public class App
 {
     public static void main( String[] args ) {
+
 
         ObjectFactory objectFactory = new ObjectFactory();
 

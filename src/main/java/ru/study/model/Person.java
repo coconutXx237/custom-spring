@@ -1,16 +1,18 @@
 package ru.study.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.study.annotation.Bean;
+import ru.study.annotation.Property;
 import ru.study.service.AnotherService;
 import ru.study.service.UserService;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Person {
+
+    @Property("person.age")
+    private int age;
 
     @Bean
     private UserService userService;
