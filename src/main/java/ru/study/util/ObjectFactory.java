@@ -1,10 +1,14 @@
 package ru.study.util;
 
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
 import ru.study.annotation.Bean;
 import ru.study.annotation.Property;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.time.Instant;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,16 +22,24 @@ public class ObjectFactory {
         propertyLoader = new PropertyLoader("application.properties");
     }
 
-    public <T> T getBean(Class<T> clazz) {
-        try {
-            var obj = clazz.getDeclaredConstructor().newInstance();
-            var beans = createBeans(clazz);
-            beanContainer.putAll(beans);
-            handleAnnotations(obj, beanContainer);
-            return obj;
-        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+    public <T> T getBean(Class<T> targetClass) {
+        Enhancer enhancer = getEnhancer(targetClass);
+        T proxyObj = (T) enhancer.create();
+        //var obj = clazz.getDeclaredConstructor().newInstance();
+        var beans = createBeans(targetClass);
+        beanContainer.putAll(beans);
+        handleAnnotations(targetClass, proxyObj, beanContainer);
+        return proxyObj;
+    }
+
+    private static <T> Enhancer getEnhancer(Class<T> clazz) {
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(clazz);
+        enhancer.setCallback((MethodInterceptor) (obj, method, arguments, proxy) -> {
+            System.out.printf("Метод %S у объекта %s класса %s вызвался во время '%s'\n", method.getName(), proxy.hashCode(), obj.getClass(), Instant.now());
+            return proxy.invokeSuper(obj, arguments);
+        });
+        return enhancer;
     }
 
     private <T> Map<Class<?>, Object> createBeans(Class<T> clazz) {
@@ -49,8 +61,8 @@ public class ObjectFactory {
         return resultMap;
     }
 
-    private void handleAnnotations(Object obj, Map<Class<?>, Object> beanContainer) {
-        Field[] fields = obj.getClass().getDeclaredFields();
+    private <T> void handleAnnotations(Class<T> targetClass, Object obj, Map<Class<?>, Object> beanContainer) {
+        Field[] fields = targetClass.getDeclaredFields();
         for (Field field : fields) {
             if (field.isAnnotationPresent(Bean.class)) injectBean(field, obj, beanContainer);
             if (field.isAnnotationPresent(Property.class)) injectProperty(field, obj);

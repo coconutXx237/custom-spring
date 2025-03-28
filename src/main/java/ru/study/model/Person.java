@@ -20,4 +20,7 @@ public class Person {
     @Bean
     private AnotherService anotherService;
 
+    public void sayAge() {
+        System.out.println("This person`s age is: " + age);
+    }
 }
