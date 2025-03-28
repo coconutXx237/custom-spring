@@ -1,13 +1,8 @@
 package ru.study;
 
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.FixedValue;
-import net.sf.cglib.proxy.MethodInterceptor;
 import ru.study.model.Person;
 import ru.study.model.User;
 import ru.study.util.ObjectFactory;
-
-import java.time.Instant;
 
 public class App
 {
