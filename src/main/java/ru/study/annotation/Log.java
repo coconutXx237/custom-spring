@@ -6,7 +6,7 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target({ElementType.FIELD})
+@Target({ElementType.METHOD})
 @Retention(RUNTIME)
 public @interface Log {
 }

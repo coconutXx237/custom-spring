@@ -11,10 +11,12 @@ public class App
         ObjectFactory objectFactory = new ObjectFactory();
 
         Person person = objectFactory.getBean(Person.class);
-        System.out.println(person);
+       // System.out.println(person);
 
-        User user = objectFactory.getBean(User.class);
-        System.out.println(user);
+        // User user = objectFactory.getBean(User.class);
+       // System.out.println(user);
+
+        person.sayAge();
 
     }
 }

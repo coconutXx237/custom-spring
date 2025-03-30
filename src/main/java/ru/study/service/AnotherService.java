@@ -5,6 +5,6 @@ public class AnotherService {
 
 
     public AnotherService() {
-        System.out.println("AnotherService Bean created");
+        //System.out.println("AnotherService Bean created");
     }
 }
