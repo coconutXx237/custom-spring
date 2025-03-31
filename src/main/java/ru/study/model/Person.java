@@ -21,8 +21,12 @@ public class Person {
     @Bean
     private AnotherService anotherService;
 
-    @Log
     public void sayAge() {
         System.out.println("This person`s age is: " + getAge());
+    }
+
+    @Log
+    public int getAge() {
+        return age;
     }
 }
